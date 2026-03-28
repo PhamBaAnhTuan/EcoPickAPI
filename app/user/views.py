@@ -29,10 +29,57 @@ from .services.user_service import UserService
 from role.models import Role
 from .filter import UserFilterBackend
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
+from app.swagger import (
+    user_signup_schema,
+    user_signin_schema,
+    user_refresh_token_schema,
+    user_logout_schema,
+    user_userinfo_schema,
+    user_change_password_schema,
+    user_forgot_password_schema,
+    user_reset_password_schema,
+    user_list_params,
+)
+
 User = get_user_model()
 AccessToken = get_access_token_model()
 
 
+@extend_schema_view(
+    list=extend_schema(
+        summary="Danh sách tất cả Users",
+        description="Lấy danh sách tất cả người dùng. Hỗ trợ lọc theo role_id, tìm kiếm bằng textSearch, và phân trang bằng limitnumber.",
+        parameters=user_list_params,
+        tags=["User"],
+    ),
+    retrieve=extend_schema(
+        summary="Chi tiết User",
+        description="Lấy thông tin chi tiết của 1 user theo UUID.",
+        tags=["User"],
+    ),
+    create=extend_schema(
+        summary="Tạo User mới (Admin)",
+        description="Tạo user mới. Chỉ admin mới có quyền.",
+        tags=["User"],
+    ),
+    update=extend_schema(
+        summary="Cập nhật User",
+        description="Cập nhật thông tin user (partial update). Scope: admin, organizer, moderator, user.",
+        tags=["User"],
+    ),
+    partial_update=extend_schema(
+        summary="Cập nhật một phần User",
+        description="Cập nhật một phần thông tin user.",
+        tags=["User"],
+    ),
+    destroy=extend_schema(
+        summary="Xóa User",
+        description="Xóa user. Chỉ admin mới có quyền.",
+        tags=["User"],
+    ),
+)
 class UserViewSet(BaseViewSet, OAuthLibMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -46,6 +93,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
         "destroy": [["admin"]],
     }
 
+    @user_signup_schema
     @action(
         methods=["post"], detail=False, url_path="signup", permission_classes=[AllowAny]
     )
@@ -68,10 +116,6 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
             return Response(
                 {"detail": "Email already exists!"}, status=HTTP_400_BAD_REQUEST
             )
-        # if User.objects.filter(phone_number=phone_number).exists():
-        #     return Response(
-        #         {"detail": "Phone number already exists!"}, status=HTTP_400_BAD_REQUEST
-        #     )
 
         user = User.objects.create_user(
             email=email,
@@ -85,26 +129,17 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
         )
         return Response(UserSerializer(user).data, status=HTTP_201_CREATED)
 
+    @user_signin_schema
     @action(
         methods=["post"], detail=False, url_path="signin", permission_classes=[AllowAny]
     )
     def signin(self, request, *args, **kwargs):
         print("signing in...")
 
-        # 1. Lấy "email" từ request thay vì "username"
         email = request.data.get("email")
         password = request.data.get("password")
 
-        # print(f"email: {email}")
-        # print(f"password: {password}")
-        # print(f"Client id: {config('CLIENT_ID')}")
-        # print(f"Client secret: {config('CLIENT_SECRET')}")
-
-        # 2. Truyền email vào hàm authenticate (thay vì username)
         user = authenticate(request, email=email, password=password)
-
-        # Lưu ý: Tùy vào cách bạn viết Custom Auth Backend, nếu nó vẫn bắt nhận kwarg username
-        # thì bạn đổi lại thành: authenticate(request, username=email, password=password)
 
         if user:
             scope = user.role.name if hasattr(user, "role") and user.role else ""
@@ -112,7 +147,6 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
             post_data.update(
                 {
                     "grant_type": "password",
-                    # 3. Ép email thành username để gửi cho endpoint /o/token/ của OAuth2
                     "username": email,
                     "client_type": "confidential",
                     "client_id": config("CLIENT_ID"),
@@ -146,6 +180,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
                 {"detail": "Invalid credentials!"}, status=HTTP_401_UNAUTHORIZED
             )
 
+    @user_refresh_token_schema
     @action(
         methods=["post"],
         detail=False,
@@ -189,6 +224,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
             response[k] = v
         return response
 
+    @user_logout_schema
     @action(
         methods=["post"],
         detail=False,
@@ -238,6 +274,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
 
         return Response({"message": "Logout success!"}, status=HTTP_200_OK)
 
+    @user_userinfo_schema
     @action(
         methods=["get"],
         detail=False,
@@ -250,6 +287,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
         user_serializer = UserInfoSerializer(user, context={"request": request})
         return Response(user_serializer.data, status=HTTP_200_OK)
 
+    @user_change_password_schema
     @action(
         methods=["post"],
         detail=False,
@@ -274,6 +312,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
                 {"message": "An error occurred."}, status=HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @user_forgot_password_schema
     @action(
         methods=["post"],
         detail=False,
@@ -291,6 +330,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
                 {"message": "An error occurred."}, status=HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @user_reset_password_schema
     @action(
         methods=["post"],
         detail=False,

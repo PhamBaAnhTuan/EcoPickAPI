@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "oauth2_provider",
     "rest_framework",
+    "drf_spectacular",
     "user",
     "role",
     "report",
@@ -92,10 +93,51 @@ REST_FRAMEWORK = {
         # "rest_framework.permissions.AllowAny",
         "app.permission.TokenHasActionScope",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DATE_INPUT_FORMATS": ["%d/%m/%Y %H:%M:%S"],
     "DATETIME_INPUT_FORMATS": ["%d/%m/%Y %H:%M:%S"],
     "DATE_FORMAT": "%d/%m/%Y",
     "DATETIME_FORMAT": "%d/%m/%Y %H:%M:%S",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "EcoPick API",
+    "DESCRIPTION": "API documentation cho ứng dụng EcoPick - Nền tảng bảo vệ môi trường cộng đồng. "
+                   "Bao gồm: Authentication, User Management, Events, Posts, Reports, Chat, Badges, Exchange Items.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SCHEMA_PATH_PREFIX": r"/api",
+    "TAGS": [
+        {"name": "Authentication", "description": "Đăng ký, đăng nhập, token, mật khẩu"},
+        {"name": "User", "description": "Quản lý thông tin người dùng"},
+        {"name": "Role", "description": "Quản lý vai trò (admin, organizer, moderator, user)"},
+        {"name": "Event", "description": "Quản lý sự kiện môi trường"},
+        {"name": "Event Participant", "description": "Quản lý người tham gia sự kiện"},
+        {"name": "Tour Stop", "description": "Quản lý điểm dừng tour"},
+        {"name": "Post", "description": "Bài viết cộng đồng"},
+        {"name": "Post Media", "description": "Media đính kèm bài viết"},
+        {"name": "Comment", "description": "Bình luận bài viết"},
+        {"name": "Like", "description": "Lượt thích bài viết"},
+        {"name": "Report", "description": "Báo cáo rác thải / ô nhiễm"},
+        {"name": "Report Image", "description": "Hình ảnh báo cáo"},
+        {"name": "Conversation", "description": "Cuộc hội thoại"},
+        {"name": "Conversation Member", "description": "Thành viên hội thoại"},
+        {"name": "Message", "description": "Tin nhắn"},
+        {"name": "Point Log", "description": "Lịch sử điểm eco"},
+        {"name": "Badge", "description": "Huy hiệu"},
+        {"name": "User Badge", "description": "Huy hiệu đã nhận của user"},
+        {"name": "Exchange Item", "description": "Vật phẩm trao đổi"},
+    ],
+    "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": False,
+        "filter": True,
+    },
+    "SECURITY": [
+        {"OAuth2": ["admin", "organizer", "moderator", "user"]},
+    ],
 }
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 OAUTH2_PROVIDER = {

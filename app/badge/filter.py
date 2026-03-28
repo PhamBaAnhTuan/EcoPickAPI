@@ -1,4 +1,7 @@
-class BadgeFilter:
+from rest_framework.filters import BaseFilterBackend
+
+
+class BadgeFilter(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         filters = {}
 
