@@ -49,9 +49,9 @@ class EventViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = EventSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -90,9 +90,9 @@ class EventParticipantsViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = EventParticipantsSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -131,8 +131,8 @@ class TourStopViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = TourStopSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }

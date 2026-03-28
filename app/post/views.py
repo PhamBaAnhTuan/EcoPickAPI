@@ -33,9 +33,9 @@ class PostViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = PostSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -62,10 +62,10 @@ class PostMediaViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = PostMediaSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
-        "destroy": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }
 
 
@@ -91,10 +91,10 @@ class CommentViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = CommentSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
-        "destroy": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }
 
 
@@ -120,8 +120,8 @@ class LikeViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = LikeSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
-        "destroy": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }

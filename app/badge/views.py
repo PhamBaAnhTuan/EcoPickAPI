@@ -39,9 +39,9 @@ class BadgeViewSet(BaseViewSet, OAuthLibMixin):
     filter_backends = [BadgeFilter]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -69,9 +69,9 @@ class UserBadgeViewSet(BaseViewSet, OAuthLibMixin):
     filter_backends = [BadgeFilter]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -103,8 +103,8 @@ class ExchangeItemViewSet(BaseViewSet, OAuthLibMixin):
     filter_backends = [BadgeFilter]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }

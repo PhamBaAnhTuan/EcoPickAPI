@@ -34,9 +34,9 @@ class ConversationViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = ConversationSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -63,9 +63,9 @@ class ConversationMemberViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = ConversationMemberSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -92,9 +92,9 @@ class MessageViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = MessageSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -121,8 +121,8 @@ class PointLogViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = PointLogSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }

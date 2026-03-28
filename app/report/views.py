@@ -33,9 +33,9 @@ class ReportViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = WasteReportSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"], ["user"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
@@ -62,8 +62,8 @@ class ReportImageViewSet(BaseViewSet, OAuthLibMixin):
     serializer_class = ReportImageSerializer
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"]],
-        "create": [["admin"], ["user"]],
-        "update": [["admin"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
