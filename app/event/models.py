@@ -18,7 +18,9 @@ class Event(models.Model):
     )
     title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(null=True, blank=True)
-    cover_image_url = models.CharField(max_length=255, null=True, blank=True)
+    cover_image_url = models.ImageField(
+        upload_to="event_images/", blank=True, null=True
+    )
     type = models.CharField(
         max_length=100, null=True, blank=True
     )  # cleanup, tree_planting, workshop, beach_cleanup, education, tour etc.

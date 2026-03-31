@@ -3,6 +3,7 @@ from app.views.base import BaseViewSet
 from .models import WasteReport, ReportImage
 from .serializer import WasteReportSerializer, ReportImageSerializer
 from rest_framework.exceptions import NotAuthenticated, PermissionDenied
+from rest_framework.parsers import MultiPartParser, FormParser
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from app.swagger import common_list_params
 
@@ -38,6 +39,7 @@ class ReportViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
+    parser_classes = [MultiPartParser, FormParser]
 
 
 @extend_schema_view(
@@ -67,3 +69,4 @@ class ReportImageViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
+    parser_classes = [MultiPartParser, FormParser]

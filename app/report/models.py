@@ -37,17 +37,24 @@ class WasteReport(models.Model):
     def __str__(self):
         return self.location or f"Report {self.id}"
 
+
 class ReportImage(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, unique=True)
-    report_id = models.ForeignKey(WasteReport, on_delete=models.CASCADE, related_name='images')
-    url = models.CharField(max_length=255, null=True, blank=True)
-    thumbnail_url = models.CharField(max_length=255, null=True, blank=True)
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False, unique=True
+    )
+    report_id = models.ForeignKey(
+        WasteReport, on_delete=models.CASCADE, related_name="images"
+    )
+    url = models.ImageField(upload_to="report_images/", blank=True, null=True)
+    thumbnail_url = models.ImageField(
+        upload_to="report_thumbnails/", blank=True, null=True
+    )
     height = models.IntegerField(null=True, blank=True)
     width = models.IntegerField(null=True, blank=True)
     order_index = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return self.url or f"Image {self.id}"
 

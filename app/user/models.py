@@ -19,7 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=20, null=True, unique=True)
     address = models.TextField(blank=True, null=True, default="Buon Ma Thuot")
     date_of_birth = models.DateField(null=True, blank=True)
-    avatar = models.CharField(null=True, blank=True)
+    avatar = models.ImageField(upload_to="user_avatars/", blank=True, null=True)
     bio = models.TextField(null=True, blank=True)
     
     level = models.IntegerField(default=1)

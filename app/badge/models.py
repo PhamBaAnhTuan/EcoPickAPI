@@ -10,7 +10,7 @@ class Badge(models.Model):
     )
     name = models.CharField(max_length=255, null=False, blank=False, unique=True)
     description = models.TextField(null=True, blank=True)
-    icon_url = models.CharField(max_length=255, null=True, blank=True)
+    icon_url = models.ImageField(upload_to="badge_icons/", blank=True, null=True)
     category = models.TextField(
         null=True, blank=True
     )  # reporting, events, social, streaks, exchange
@@ -50,7 +50,7 @@ class ExchangItem(models.Model):
     )
     name = models.CharField(max_length=255, null=False, blank=False, unique=True)
     description = models.TextField(null=True, blank=True)
-    icon_url = models.CharField(max_length=255, null=True, blank=True)
+    icon_url = models.ImageField(upload_to="exchange_items_images/", blank=True, null=True)
     category = models.TextField(
         null=True, blank=True
     )  # tools, plants, seeds, reusable_items, educational_materials etc.

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "oauth2_provider",
     "rest_framework",
     "drf_spectacular",
+    "cloudinary_storage",
+    "cloudinary",
     "user",
     "role",
     "report",
@@ -100,18 +102,39 @@ REST_FRAMEWORK = {
     "DATETIME_FORMAT": "%d/%m/%Y %H:%M:%S",
 }
 
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": config("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": config("CLOUDINARY_API_KEY"),
+    "API_SECRET": config("CLOUDINARY_API_SECRET"),
+}
+# DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "EcoPick API",
     "DESCRIPTION": "API documentation cho ứng dụng EcoPick - Nền tảng bảo vệ môi trường cộng đồng. "
-                   "Bao gồm: Authentication, User Management, Events, Posts, Reports, Chat, Badges, Exchange Items.",
+    "Bao gồm: Authentication, User Management, Events, Posts, Reports, Chat, Badges, Exchange Items.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
     "SCHEMA_PATH_PREFIX": r"/api",
     "TAGS": [
-        {"name": "Authentication", "description": "Đăng ký, đăng nhập, token, mật khẩu"},
+        {
+            "name": "Authentication",
+            "description": "Đăng ký, đăng nhập, token, mật khẩu",
+        },
         {"name": "User", "description": "Quản lý thông tin người dùng"},
-        {"name": "Role", "description": "Quản lý vai trò (admin, organizer, moderator, user)"},
+        {
+            "name": "Role",
+            "description": "Quản lý vai trò (admin, organizer, moderator, user)",
+        },
         {"name": "Event", "description": "Quản lý sự kiện môi trường"},
         {"name": "Event Participant", "description": "Quản lý người tham gia sự kiện"},
         {"name": "Tour Stop", "description": "Quản lý điểm dừng tour"},

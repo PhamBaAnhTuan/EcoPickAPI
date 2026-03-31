@@ -53,8 +53,8 @@ class PostMedia(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
     post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="media")
-    url = models.CharField(max_length=255, null=True, blank=True)
-    thumbnail_url = models.CharField(max_length=255, null=True, blank=True)
+    url = models.ImageField(upload_to="post_images/", blank=True, null=True)
+    thumbnail_url = models.ImageField(upload_to="post_thumbnails/", blank=True, null=True)
     type = models.CharField(max_length=50, null=True, blank=True)  # image, video, etc.
     height = models.IntegerField(null=True, blank=True)
     width = models.IntegerField(null=True, blank=True)
@@ -85,7 +85,9 @@ class Comment(models.Model):
         Event, on_delete=models.CASCADE, related_name="comments", null=True, blank=True
     )
     content = models.TextField(null=True, blank=True)
-    photo_url = models.CharField(max_length=255, null=True, blank=True)
+    photo_url = models.ImageField(
+        upload_to="comment_images/", blank=True, null=True
+    )
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
