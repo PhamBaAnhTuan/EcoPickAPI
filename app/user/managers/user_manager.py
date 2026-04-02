@@ -1,14 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
 from role.models import Role
-from rest_framework import serializers
-from datetime import datetime
-
-
-class CustomDateField(serializers.DateField):
-    def __init__(self, **kwargs):
-        kwargs["input_formats"] = ["%d/%m/%Y"]
-        kwargs["format"] = "%d/%m/%Y"
-        super().__init__(**kwargs)
 
 
 class UserManager(BaseUserManager):
@@ -34,16 +25,10 @@ class UserManager(BaseUserManager):
 
         if role is None:
             role, created = Role.objects.get_or_create(
-                id="user", name="user", defaults={"scope": "user"}
+                name="user", defaults={"scope": "user:basic_access"}
             )
         else:
             role = Role.objects.filter(name=role).first()
-
-        if isinstance(date_of_birth, str):
-            try:
-                date_of_birth = datetime.strptime(date_of_birth, "%d/%m/%Y").date()
-            except ValueError:
-                raise ValueError("Date of birth must be in DD/MM/YYYY format")
 
         email = self.normalize_email(email)
         user = self.model(email=email)
@@ -61,10 +46,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_superuser", True)
         role, _ = Role.objects.get_or_create(
-            id="admin", name="admin", defaults={"scope": "admin"}
+            name="admin", defaults={"scope": "admin:full_access"}
         )
         return self.create_user(email, password, role=role, **extra_fields)

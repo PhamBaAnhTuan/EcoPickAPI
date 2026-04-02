@@ -84,14 +84,22 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [UserFilterBackend]
-    # permission_classes = [AllowAny]
+    permission_classes = [AllowAny]
     required_alternate_scopes = {
-        "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "list": [["admin"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "create": [["admin"]],
         "destroy": [["admin"]],
     }
+
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     print("get user role: ", user.role.name)
+    #     if user.role and user.role.name == "admin":
+    #         return User.objects.all()
+
+    #     return User.objects.filter(id=user.id)
 
     @user_signup_schema
     @action(
@@ -134,7 +142,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
         methods=["post"], detail=False, url_path="signin", permission_classes=[AllowAny]
     )
     def signin(self, request, *args, **kwargs):
-        print("signing in...")
+        # print("signing in...")
 
         email = request.data.get("email")
         password = request.data.get("password")

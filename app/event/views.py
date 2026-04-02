@@ -55,6 +55,18 @@ class EventViewSet(BaseViewSet, OAuthLibMixin):
         "destroy": [["admin"]],
     }
 
+    def create(self, request, *args, **kwargs):
+        print("\n=== DỮ LIỆU POST (REPORT) ===")
+        import pprint
+
+        pprint.pprint(dict(request.data))
+        if request.FILES:
+            print("--- FILES ---")
+            pprint.pprint(dict(request.FILES))
+        print("=============================\n")
+
+        return super().create(request, *args, **kwargs)
+
 
 @extend_schema_view(
     list=extend_schema(

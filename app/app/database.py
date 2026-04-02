@@ -1,19 +1,14 @@
-# Add these at the top of your settings.py
-import os
-from decouple import config
-from urllib.parse import urlparse, parse_qsl
+import uuid
+from django.db import models
+from django.utils import timezone
 
-# Replace the DATABASES section of your settings.py with this
-tmpPostgres = config("DATABASE_URL")
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": tmpPostgres.path.replace("/", ""),
-        "USER": tmpPostgres.username,
-        "PASSWORD": tmpPostgres.password,
-        "HOST": tmpPostgres.hostname,
-        "PORT": 5432,
-        "OPTIONS": dict(parse_qsl(tmpPostgres.query)),
-    }
-}
+class TimeStampedModel(models.Model):
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False, unique=True
+    )
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True

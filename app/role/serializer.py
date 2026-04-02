@@ -5,5 +5,5 @@ from .models import Role
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
-        fields = ["id","name"]
-        # fields = '__all__'
+        # fields = ["id","name"]
+        fields = "__all__"

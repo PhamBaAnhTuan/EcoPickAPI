@@ -4,9 +4,11 @@ from django.utils import timezone
 
 
 class Role(models.Model):
-    id = models.CharField(max_length=10, primary_key=True, editable=False, unique=True)
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False, unique=True
+    )
     name = models.CharField(max_length=200, null=False, blank=False, unique=True)
-    scope = models.TextField(null=True, blank=True)
+    scope = models.TextField(default="", null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 

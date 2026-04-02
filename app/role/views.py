@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from .models import Role
 from .serializer import RoleSerializer
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from app.views.base import BaseViewSet
 
 
 @extend_schema_view(
@@ -26,7 +27,14 @@ from drf_spectacular.utils import extend_schema, extend_schema_view
     partial_update=extend_schema(summary="Cập nhật một phần vai trò", tags=["Role"]),
     destroy=extend_schema(summary="Xóa vai trò", tags=["Role"]),
 )
-class RoleViewSet(ModelViewSet):
+class RoleViewSet(BaseViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
     permission_classes = [AllowAny]
+    # required_alternate_scopes = {
+    #     "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
+    #     "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+    #     "update": [["admin"]],
+    #     "create": [["admin"]],
+    #     "destroy": [["admin"]],
+    # }

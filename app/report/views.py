@@ -6,6 +6,7 @@ from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from app.swagger import common_list_params
+from .filter import ReportFilter
 
 
 @extend_schema_view(
@@ -30,8 +31,10 @@ from app.swagger import common_list_params
     destroy=extend_schema(summary="Xóa báo cáo", tags=["Report"]),
 )
 class ReportViewSet(BaseViewSet, OAuthLibMixin):
-    queryset = WasteReport.objects.all()
+    queryset = WasteReport.objects.select_related("reporter_id").all()
     serializer_class = WasteReportSerializer
+    parser_classes = [MultiPartParser, FormParser]
+    filter_backends = [ReportFilter]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
@@ -39,7 +42,14 @@ class ReportViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
-    parser_classes = [MultiPartParser, FormParser]
+
+    # def get_queryset(self):
+    #     user = self.request.user
+
+    #     if user.role and user.role.name == "admin":
+    #         return WasteReport.objects.all()
+
+    #     return WasteReport.objects.filter(reporter_id=user.id)
 
 
 @extend_schema_view(
@@ -62,6 +72,7 @@ class ReportViewSet(BaseViewSet, OAuthLibMixin):
 class ReportImageViewSet(BaseViewSet, OAuthLibMixin):
     queryset = ReportImage.objects.all()
     serializer_class = ReportImageSerializer
+    parser_classes = [MultiPartParser, FormParser]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
@@ -69,4 +80,23 @@ class ReportImageViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
-    parser_classes = [MultiPartParser, FormParser]
+
+    # def create(self, request, *args, **kwargs):
+    #     print("\n=== DỮ LIỆU POST (REPORT) ===")
+    #     import pprint
+
+    #     pprint.pprint(dict(request.data))
+    #     if request.FILES:
+    #         print("--- FILES ---")
+    #         pprint.pprint(dict(request.FILES))
+    #     print("=============================\n")
+
+    #     return super().create(request, *args, **kwargs)
+
+    # def get_queryset(self):
+    #     user = self.request.user
+
+    #     if user.role and user.role.name == "admin":
+    #         return ReportImage.objects.all()
+
+    #     return ReportImage.objects.filter(user__id=user.id)

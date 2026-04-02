@@ -6,4 +6,4 @@ class CustomOAuth2Validator(OAuth2Validator):
         user = request.user
         if user and user.role:
             return {"scope": user.role.scope}
-        return {}
+        return {"scope": ""}

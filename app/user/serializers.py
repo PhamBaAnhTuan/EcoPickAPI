@@ -19,18 +19,19 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
-            "id",
-            "fullname",
-            "email",
-            "phone_number",
-            "address",
-            "date_of_birth",
-            "avatar",
-            "role",
-            "role_id",
-            "password",
-        ]
+        fields = "__all__"
+        # fields = [
+        #     "id",
+        #     "fullname",
+        #     "email",
+        #     "phone_number",
+        #     "address",
+        #     "date_of_birth",
+        #     "avatar",
+        #     "role",
+        #     "role_id",
+        #     "password",
+        # ]
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -44,17 +45,17 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        # fields = ['id', 'fullname', 'email', 'phone_number', 'address', 'date_of_birth', 'avatar', 'role']
-        exclude = [
-            "password",
-            "is_superuser",
-            "is_active",
-            "groups",
-            "user_permissions",
-            "last_login",
-            "created_at",
-            "updated_at",
-        ]
+        fields = "__all__"
+        # exclude = [
+        #     "password",
+        #     "is_superuser",
+        #     "is_active",
+        #     "groups",
+        #     "user_permissions",
+        #     "last_login",
+        #     "created_at",
+        #     "updated_at",
+        # ]
 
 
 class UserInfoShortSerializer(serializers.ModelSerializer):

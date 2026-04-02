@@ -21,7 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(null=True, blank=True)
     avatar = models.ImageField(upload_to="user_avatars/", blank=True, null=True)
     bio = models.TextField(null=True, blank=True)
-    
+
     level = models.IntegerField(default=1)
     eco_points = models.IntegerField(default=0)
     total_reports = models.IntegerField(default=0)
@@ -30,7 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     followers_count = models.IntegerField(default=0)
     following_count = models.IntegerField(default=0)
     is_verified = models.BooleanField(default=False)
-    
+
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -48,13 +48,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = "oauth_user"
 
+
 class Follows(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
-    follower_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    following_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
+    follower_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="following"
+    )
+    following_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="followers"
+    )
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        unique_together = ('follower_id', 'following_id')
+        unique_together = ("follower_id", "following_id")
