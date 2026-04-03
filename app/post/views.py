@@ -1,7 +1,12 @@
 from oauth2_provider.views.mixins import OAuthLibMixin
 from app.views.base import BaseViewSet
 from .models import Post, PostMedia, Comment, Like
-from .serializer import PostSerializer, PostMediaSerializer, CommentSerializer, LikeSerializer
+from .serializer import (
+    PostSerializer,
+    PostMediaSerializer,
+    CommentSerializer,
+    LikeSerializer,
+)
 from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from app.swagger import common_list_params
@@ -36,8 +41,36 @@ class PostViewSet(BaseViewSet, OAuthLibMixin):
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "destroy": [["admin"]],
+        "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }
+
+    def get_queryset(self):
+        return Post.objects.all()
+
+    def perform_update(self, serializer):
+        user = self.request.user
+        instance = self.get_object()
+        
+        # Kiểm tra quyền: admin hoặc chính tác giả bài viết
+        is_admin = user.role and user.role.name == "admin"
+        is_owner = instance.author_id == user.id
+        
+        if not (is_admin or is_owner):
+            raise PermissionDenied("Bạn không có quyền chỉnh sửa bài viết này.")
+            
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        user = self.request.user
+        
+        # Kiểm tra quyền: admin hoặc chính tác giả bài viết
+        is_admin = user.role and user.role.name == "admin"
+        is_owner = instance.author_id == user.id
+        
+        if not (is_admin or is_owner):
+            raise PermissionDenied("Bạn không có quyền xóa bài viết này.")
+            
+        instance.delete()
 
 
 @extend_schema_view(
@@ -54,7 +87,9 @@ class PostViewSet(BaseViewSet, OAuthLibMixin):
         tags=["Post Media"],
     ),
     update=extend_schema(summary="Cập nhật media", tags=["Post Media"]),
-    partial_update=extend_schema(summary="Cập nhật một phần media", tags=["Post Media"]),
+    partial_update=extend_schema(
+        summary="Cập nhật một phần media", tags=["Post Media"]
+    ),
     destroy=extend_schema(summary="Xóa media", tags=["Post Media"]),
 )
 class PostMediaViewSet(BaseViewSet, OAuthLibMixin):
@@ -67,6 +102,11 @@ class PostMediaViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     if user.role and user.role.name == "admin":
+    #         return PostMedia.objects.all()
+    #     return PostMedia.objects.filter(author_id=user.id)
 
 
 @extend_schema_view(
@@ -83,7 +123,9 @@ class PostMediaViewSet(BaseViewSet, OAuthLibMixin):
         tags=["Comment"],
     ),
     update=extend_schema(summary="Cập nhật bình luận", tags=["Comment"]),
-    partial_update=extend_schema(summary="Cập nhật một phần bình luận", tags=["Comment"]),
+    partial_update=extend_schema(
+        summary="Cập nhật một phần bình luận", tags=["Comment"]
+    ),
     destroy=extend_schema(summary="Xóa bình luận", tags=["Comment"]),
 )
 class CommentViewSet(BaseViewSet, OAuthLibMixin):
@@ -96,6 +138,19 @@ class CommentViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role and user.role.name == "admin":
+            return Comment.objects.all()
+        return Comment.objects.filter(user_id=user.id)
+    
+    def perform_update(self, serializer):
+        instance = self.get_object()
+        user = self.request.user
+        if instance.user_id != user.id and not (user.role and user.role.name == "admin"):
+            raise PermissionDenied("You do not have permission to edit this comment.")
+        serializer.save()
 
 
 @extend_schema_view(
@@ -125,3 +180,9 @@ class LikeViewSet(BaseViewSet, OAuthLibMixin):
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"], ["organizer"], ["moderator"], ["user"]],
     }
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role and user.role.name == "admin":
+            return Like.objects.all()
+        return Like.objects.filter(user_id=user.id)

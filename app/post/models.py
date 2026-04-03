@@ -13,8 +13,8 @@ class Post(models.Model):
     author_id = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, blank=True, related_name="posts"
     )
-    title = models.CharField(max_length=255, null=True, blank=True)
-    content = models.TextField(null=True, blank=True)
+    title = models.CharField(max_length=255, null=False, blank=False)
+    content = models.TextField(null=False, blank=False)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)

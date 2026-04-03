@@ -8,10 +8,28 @@ class BadgeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class BadgeShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Badge
+        fields = [
+            "id",
+            "name",
+            "icon_url",
+        ]
+
+
 class UserBadgeSerializer(serializers.ModelSerializer):
+    badge = BadgeShortSerializer(source="badge_id", read_only=True)
+
     class Meta:
         model = UserBadge
-        fields = "__all__"
+        fields = [
+            "id",
+            "user_id",
+            "badge_id",
+            "badge",
+            "awarded_at",
+        ]
 
 
 class ExchangeItemSerializer(serializers.ModelSerializer):

@@ -50,22 +50,22 @@ class EventViewSet(BaseViewSet, OAuthLibMixin):
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"]],
+        "update": [["admin"], ["organizer"], ["moderator"]],
         "destroy": [["admin"]],
     }
 
-    def create(self, request, *args, **kwargs):
-        print("\n=== DỮ LIỆU POST (REPORT) ===")
-        import pprint
+    # def create(self, request, *args, **kwargs):
+    #     print("\n=== DỮ LIỆU POST (REPORT) ===")
+    #     import pprint
 
-        pprint.pprint(dict(request.data))
-        if request.FILES:
-            print("--- FILES ---")
-            pprint.pprint(dict(request.FILES))
-        print("=============================\n")
+    #     pprint.pprint(dict(request.data))
+    #     if request.FILES:
+    #         print("--- FILES ---")
+    #         pprint.pprint(dict(request.FILES))
+    #     print("=============================\n")
 
-        return super().create(request, *args, **kwargs)
+    #     return super().create(request, *args, **kwargs)
 
 
 @extend_schema_view(
@@ -103,8 +103,8 @@ class EventParticipantsViewSet(BaseViewSet, OAuthLibMixin):
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"]],
+        "update": [["admin"], ["organizer"], ["moderator"]],
         "destroy": [["admin"]],
     }
 
@@ -144,7 +144,7 @@ class TourStopViewSet(BaseViewSet, OAuthLibMixin):
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "create": [["admin"], ["organizer"], ["moderator"]],
+        "update": [["admin"], ["organizer"], ["moderator"]],
         "destroy": [["admin"]],
     }

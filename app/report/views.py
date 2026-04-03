@@ -31,7 +31,7 @@ from .filter import ReportFilter
     destroy=extend_schema(summary="Xóa báo cáo", tags=["Report"]),
 )
 class ReportViewSet(BaseViewSet, OAuthLibMixin):
-    queryset = WasteReport.objects.select_related("reporter_id").all()
+    queryset = WasteReport.objects.all()
     serializer_class = WasteReportSerializer
     parser_classes = [MultiPartParser, FormParser]
     filter_backends = [ReportFilter]
@@ -45,10 +45,8 @@ class ReportViewSet(BaseViewSet, OAuthLibMixin):
 
     # def get_queryset(self):
     #     user = self.request.user
-
     #     if user.role and user.role.name == "admin":
     #         return WasteReport.objects.all()
-
     #     return WasteReport.objects.filter(reporter_id=user.id)
 
 
