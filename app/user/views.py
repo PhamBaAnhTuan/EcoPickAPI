@@ -86,20 +86,20 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
     filter_backends = [UserFilterBackend]
     permission_classes = [AllowAny]
     required_alternate_scopes = {
-        "list": [["admin"]],
+        "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "update": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "create": [["admin"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "destroy": [["admin"]],
     }
 
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     print("get user role: ", user.role.name)
-    #     if user.role and user.role.name == "admin":
-    #         return User.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        # print("get user role: ", user.role.name)
+        if user.role and user.role.name == "admin":
+            return User.objects.all()
 
-    #     return User.objects.filter(id=user.id)
+        return User.objects.filter(id=user.id)
 
     @user_signup_schema
     @action(
@@ -332,11 +332,11 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
 
         try:
             UserService.forgot_password(email)
-            return Response({"message": "The link has been sent."}, status=HTTP_200_OK)
+            return Response({"message": "The link has been sent!"}, status=HTTP_200_OK)
+        except ValueError as ve:
+            return Response({"message": str(ve)}, status=HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response(
-                {"message": "An error occurred."}, status=HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({"message": f"{e}"}, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
     @user_reset_password_schema
     @action(
@@ -348,11 +348,10 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
     def reset_password(self, request, *args, **kwargs):
         token = request.data.get("token")
         new_password = request.data.get("new_password")
-
         try:
             UserService.reset_password(token, new_password)
-            return Response({"message": "Password has been reset."}, status=HTTP_200_OK)
+            return Response({"message": "Password has been reset!"}, status=HTTP_200_OK)
+        except ValueError as ve:
+            return Response({"message": str(ve)}, status=HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response(
-                {"message": "An error occurred."}, status=HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({"message": "An error occurred."}, status=HTTP_500_INTERNAL_SERVER_ERROR)

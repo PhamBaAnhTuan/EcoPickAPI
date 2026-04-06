@@ -35,12 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
-    required_alternate_scopes = {
-        "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "update": [["admin"], ["organizer"]],
-        "destroy": [["admin"]],
-    }
     role = RoleSerializer(read_only=True)
 
     class Meta:

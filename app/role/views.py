@@ -30,11 +30,11 @@ from app.views.base import BaseViewSet
 class RoleViewSet(BaseViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
-    permission_classes = [AllowAny]
-    # required_alternate_scopes = {
-    #     "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
-    #     "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
-    #     "update": [["admin"]],
-    #     "create": [["admin"]],
-    #     "destroy": [["admin"]],
-    # }
+    # permission_classes = [AllowAny]
+    required_alternate_scopes = {
+        "list": [["admin"], ["organizer"], ["moderator"],["user"]],
+        "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
+        "update": [["admin"]],
+        "create": [["admin"]],
+        "destroy": [["admin"]],
+    }

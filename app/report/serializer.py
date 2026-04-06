@@ -20,7 +20,7 @@ class WasteReportSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "reporter",
-            # "reporter_id",
+            "reporter_id",
             "latitude",
             "longitude",
             "location",
