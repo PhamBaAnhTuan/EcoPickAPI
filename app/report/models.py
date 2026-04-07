@@ -6,13 +6,7 @@ from django.utils import timezone
 from user.models import User
 
 
-STATUS_CHOICES = [
-    ("pending", "Pending"),
-    ("reported", "Reported"),
-    ("verified", "Verified"),
-    ("in_progress", "In Progress"),
-    ("cleaned", "Cleaned"),
-]
+STATUS_CHOICES = [("reviewing", "Reviewing"), ("verified", "Verified")]
 
 
 class WasteReport(models.Model):
@@ -30,11 +24,10 @@ class WasteReport(models.Model):
     country = models.CharField(max_length=100, null=True, blank=True)
     report_img = models.ImageField(upload_to="report_images/", blank=True, null=True)
     severity = models.CharField(max_length=50, null=True, blank=True)
-    waste_type = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     status = models.CharField(
-        max_length=50, choices=STATUS_CHOICES, default="REPORTED"
-    )  # reported, verified, in_progress, cleaned
+        max_length=50, choices=STATUS_CHOICES, default=STATUS_CHOICES[0]
+    )  # reviewing, verified
     upvote_count = models.IntegerField(default=0)
     comment_count = models.IntegerField(default=0)
 

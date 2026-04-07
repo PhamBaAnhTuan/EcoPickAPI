@@ -36,16 +36,14 @@ class BaseViewSet(viewsets.ModelViewSet):
         return self.serializer_map.get(self.action, self.serializer_class)
     
     def create(self, request, *args, **kwargs):
-        data = request.data.copy()
-        serializer = self.get_serializer(data=data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             self.clear_querysets_cache()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
-        data = request.data.copy()
-        serializer = self.get_serializer(self.get_object(),data=data, partial=True)
+        serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             self.perform_update(serializer)
             self.clear_querysets_cache()

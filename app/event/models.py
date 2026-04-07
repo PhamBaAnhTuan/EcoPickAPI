@@ -16,7 +16,7 @@ class Event(models.Model):
         blank=False,
         related_name="events",
     )
-    title = models.CharField(max_length=255, null=False, blank=False)
+    title = models.CharField(max_length=255, null=False, blank=False, default='')
     description = models.TextField(null=True, blank=True)
     cover_image_url = models.ImageField(
         upload_to="event_images/", blank=True, null=True
@@ -51,19 +51,17 @@ class EventParticipants(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
-    event_id = models.ForeignKey(
+    event = models.ForeignKey(
         Event,
         on_delete=models.CASCADE,
         related_name="participants",
-        unique=True,
         null=True,
         blank=True,
     )
-    user_id = models.ForeignKey(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="events_joined",
-        unique=True,
         null=True,
         blank=True,
     )
@@ -71,13 +69,13 @@ class EventParticipants(models.Model):
         max_length=50, default="joined"
     )  # joined, checked_in, completed, left, cancelled
     joined_at = models.DateTimeField(default=timezone.now)
-    checked_in_at = models.DateTimeField(auto_now=True)
+    checked_in_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Participant {self.user_id} in Event {self.event_id}"
 
-    # class Meta:
-    #     unique_together = ("event_id", "user_id")
+    class Meta:
+        unique_together = ("event", "user")
 
 
 class TourStop(models.Model):

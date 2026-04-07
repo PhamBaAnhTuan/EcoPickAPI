@@ -84,7 +84,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = [UserFilterBackend]
-    permission_classes = [AllowAny]
+    # permission_classes = [AllowAny]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],

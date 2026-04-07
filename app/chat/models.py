@@ -9,7 +9,7 @@ class Conversation(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
     type = models.CharField(max_length=50, null=True, blank=True)  # one_on_one, group
-    event_id = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True, related_name="conversations")
+    event = models.ForeignKey(Event, on_delete=models.SET_NULL, null=True, blank=True, related_name="conversations")
     name = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
@@ -34,8 +34,8 @@ class Message(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
-    conversation_id = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
-    sender_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_messages')
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='sent_messages')
     content = models.TextField(null=True, blank=True)
     photo_url = models.ImageField(upload_to="message_images/", blank=True, null=True)
     location_latitude = models.FloatField(null=True, blank=True)
@@ -50,7 +50,7 @@ class PointLog(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='point_logs')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='point_logs')
     points = models.IntegerField()
     reason = models.CharField(max_length=255, null=True, blank=True)       #report_created, event_completed, reward_redeemed...
     created_at = models.DateTimeField(default=timezone.now)
