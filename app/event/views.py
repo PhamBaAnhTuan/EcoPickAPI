@@ -10,6 +10,7 @@ from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 from app.swagger import common_list_params
+from .filter import EventFilter
 
 
 @extend_schema_view(
@@ -100,25 +101,14 @@ class EventViewSet(BaseViewSet, OAuthLibMixin):
 class EventParticipantsViewSet(BaseViewSet, OAuthLibMixin):
     queryset = EventParticipants.objects.all()
     serializer_class = EventParticipantsSerializer
+    filter_backends = [EventFilter]
     required_alternate_scopes = {
         "list": [["admin"], ["organizer"], ["moderator"], ["user"]],
         "retrieve": [["admin"], ["organizer"], ["moderator"], ["user"]],
-        "create": [["admin"], ["organizer"], ["moderator"]],
-        "update": [["admin"], ["organizer"], ["moderator"]],
-        "destroy": [["admin"]],
+        "create": [["admin"], ["organizer"], ["moderator"], ['user']],
+        "update": [["admin"], ["organizer"], ["moderator"], ['user']],
+        "destroy": [["admin"], ["organizer"], ["moderator"], ['user']],
     }
-
-    def create(self, request, *args, **kwargs):
-        print("\n=== DỮ LIỆU POST (REPORT) ===")
-        import pprint
-
-        pprint.pprint(dict(request.data))
-        if request.FILES:
-            print("--- FILES ---")
-            pprint.pprint(dict(request.FILES))
-        print("=============================\n")
-
-        return super().create(request, *args, **kwargs)
 
 
 @extend_schema_view(

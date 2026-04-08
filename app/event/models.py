@@ -16,7 +16,7 @@ class Event(models.Model):
         blank=False,
         related_name="events",
     )
-    title = models.CharField(max_length=255, null=False, blank=False, default='')
+    title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     cover_image_url = models.ImageField(
         upload_to="event_images/", blank=True, null=True
@@ -69,10 +69,10 @@ class EventParticipants(models.Model):
         max_length=50, default="joined"
     )  # joined, checked_in, completed, left, cancelled
     joined_at = models.DateTimeField(default=timezone.now)
-    checked_in_at = models.DateTimeField(null=True, blank=True)
+    checked_in_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Participant {self.user_id} in Event {self.event_id}"
+        return f"Participant {self.user} in Event {self.event}"
 
     class Meta:
         unique_together = ("event", "user")

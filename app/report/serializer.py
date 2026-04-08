@@ -28,7 +28,6 @@ class WasteReportSerializer(serializers.ModelSerializer):
             "city",
             "country",
             "severity",
-            "waste_type",
             "description",
             "status",
             "cleaned_by",
