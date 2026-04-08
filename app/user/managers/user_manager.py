@@ -29,6 +29,7 @@ class UserManager(BaseUserManager):
             )
         else:
             role = Role.objects.filter(name=role).first()
+            print("role in manager: ", role)
 
         email = self.normalize_email(email)
         user = self.model(email=email)

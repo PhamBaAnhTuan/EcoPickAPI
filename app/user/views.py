@@ -93,13 +93,13 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
         "destroy": [["admin"]],
     }
 
-    def get_queryset(self):
-        user = self.request.user
-        # print("get user role: ", user.role.name)
-        if user.role and user.role.name == "admin":
-            return User.objects.all()
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     # print("get user role: ", user.role.name)
+    #     if user.role and user.role.name == "admin":
+    #         return User.objects.all()
 
-        return User.objects.filter(id=user.id)
+    #     return User.objects.filter(id=user.id)
 
     @user_signup_schema
     @action(
@@ -113,7 +113,7 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
         address = request.data.get("address")
         avatar = request.data.get("avatar")
         date_of_birth = request.data.get("date_of_birth")
-        role = request.data.get("role")
+        role_input = request.data.get("role")
 
         if not email or not password:
             return Response(
@@ -125,15 +125,19 @@ class UserViewSet(BaseViewSet, OAuthLibMixin):
                 {"detail": "Email already exists!"}, status=HTTP_400_BAD_REQUEST
             )
 
+        role_obj = None
+        if role_input:
+            try:
+                role_obj = Role.objects.filter(name=role_input).first()
+            except Exception as e:
+                print("Error: ", e.args[0])
+                pass
+
         user = User.objects.create_user(
             email=email,
             password=password,
             fullname=fullname,
-            phone_number=phone_number,
-            address=address,
-            date_of_birth=date_of_birth,
-            avatar=avatar,
-            role=role,
+            role=role_obj,
         )
         return Response(UserSerializer(user).data, status=HTTP_201_CREATED)
 

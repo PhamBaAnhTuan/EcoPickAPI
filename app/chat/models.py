@@ -50,10 +50,10 @@ class PointLog(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, unique=True
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='point_logs')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='point_logs', null=True, blank=True)
     points = models.IntegerField()
     reason = models.CharField(max_length=255, null=True, blank=True)       #report_created, event_completed, reward_redeemed...
     created_at = models.DateTimeField(default=timezone.now)
 
-    def __str__(self):
-        return f"PointLog {self.id} for User {self.user_id}"
+    # def __str__(self):
+    #     return f"PointLog {self.id} for User {self.user}"
